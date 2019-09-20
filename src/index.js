@@ -4,9 +4,9 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import 'tachyons'
-import SingUp from './components/signup/signup.js'
+import Input from './components/main/input.js'
 
-ReactDOM.render(<SingUp />, document.getElementById('root'));
+ReactDOM.render(<Input />, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
