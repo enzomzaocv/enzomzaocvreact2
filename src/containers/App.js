@@ -14,10 +14,16 @@ class App extends Component{
   constructor(){
     super();
     this.state= {
-      none:'none'
+      input:''
     }
   }
 
+onInputChange= (event)=>{
+  console.log(event.target.value)
+}
+onSubmit= () =>{
+  console.log('click submit');
+}
   componentDidMount(){
 
 
@@ -32,7 +38,7 @@ class App extends Component{
       <NavBar/>
       <Logo/>
       <Rank/>
-      <Input/>
+      <Input onInputChange={this.onInputChange} onSubmit={this.onSubmit}/>
       <Image/>
       </div>
       )
