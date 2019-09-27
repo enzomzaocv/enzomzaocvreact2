@@ -47,12 +47,13 @@ class App extends Component{
     const image = document.getElementById('imagen');
     const width = Number(image.width);
     const height= Number(image.height);
-
+    console.log('ancho',width);
+    console.log('largo',height);
     return {
-      bottom_row: (height * coordenadas.bottom_row),
+      bottom_row: height - (height * coordenadas.bottom_row),
       left_col: (width * coordenadas.left_col),
       right_col: width - (width * coordenadas.right_col),
-      top_row: height - (height * coordenadas.top_row)
+      top_row:(height * coordenadas.top_row)
     }
   }
 
