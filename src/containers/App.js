@@ -7,26 +7,58 @@ import Image from '../components/main/image'
 import Rank from '../components/main/rank'
 import Particles from 'react-particles-js';
 import particulasConfig from './particlesjs-config.json';
-
-
+import Clarifai from 'clarifai';
+const app = new Clarifai.App({apiKey: '0ec2241b9ef442e9aefc036b79dc1d39'});
 
 class App extends Component{
   constructor(){
     super();
     this.state= {
-      input:''
+      input:'',
+      imageurl:'',
+      bbox:{}
     }
   }
 
-onInputChange= (event)=>{
-  console.log(event.target.value)
-}
-onSubmit= () =>{
-  console.log('click submit');
-}
-  componentDidMount(){
+  onInputChange=(event)=>{
+    this.setState({input: event.target.value});
+    console.log(this.state);
+  }
 
+  onSubmit=()=>{
+    console.log('click submit');
+    this.setState({imageurl:this.state.input})
+    //Respuesta Clarifai
+    // En {id: Clarifai.GENERAL_MODEL... reemplazamos GENERAL_MODEL por el model que realmente vamos a utilizar
+    app.models.predict('a403429f2ddf4b49b307e318f00e528b', this.state.input)
+      .then(response => {
+        // There was a successful response
+        this.displayFaceBox(this.definirBox(response));
 
+      })
+      .catch(error => {
+        // There was an error
+        console.log(error)
+      });
+  }
+
+  definirBox=(data)=>{
+    const coordenadas = data.outputs[0].data.regions[0].region_info.bounding_box;
+    const image = document.getElementById('imagen');
+    const width = Number(image.width);
+    const height= Number(image.height);
+
+    return {
+      bottom_row: (height * coordenadas.bottom_row),
+      left_col: (width * coordenadas.left_col),
+      right_col: width - (width * coordenadas.right_col),
+      top_row: height - (height * coordenadas.top_row)
+    }
+  }
+
+  displayFaceBox=(box)=>{
+    console.log(box);
+    this.setState({bbox:box});
   }
 
   render(){
@@ -39,7 +71,7 @@ onSubmit= () =>{
       <Logo/>
       <Rank/>
       <Input onInputChange={this.onInputChange} onSubmit={this.onSubmit}/>
-      <Image/>
+      <Image imageDetect={this.state.imageurl} bbox={this.state.bbox}/>
       </div>
       )
   }
