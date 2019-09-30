@@ -8,6 +8,8 @@ import Rank from '../components/main/rank'
 import Particles from 'react-particles-js';
 import particulasConfig from './particlesjs-config.json';
 import Clarifai from 'clarifai';
+import SignIn from '../components/signin/signin'
+import SignUp from '../components/signup/signup'
 const app = new Clarifai.App({apiKey: '0ec2241b9ef442e9aefc036b79dc1d39'});
 
 class App extends Component{
@@ -16,7 +18,8 @@ class App extends Component{
     this.state= {
       input:'',
       imageurl:'',
-      bbox:{}
+      bbox:{},
+      route: 'signin'
     }
   }
 
@@ -62,17 +65,33 @@ class App extends Component{
     this.setState({bbox:box});
   }
 
+  onRouteChange=(route)=>{
+    this.setState({route:route});
+  }
+
   render(){
     return(
       <div>
-      <Particles  className='particles'
-                params={JSON.parse(JSON.stringify(particulasConfig))}
-                />
-      <NavBar/>
-      <Logo/>
-      <Rank/>
-      <Input onInputChange={this.onInputChange} onSubmit={this.onSubmit}/>
-      <Image imageDetect={this.state.imageurl} bbox={this.state.bbox}/>
+        <Particles  className='particles'
+                  params={JSON.parse(JSON.stringify(particulasConfig))}
+                  />
+        <NavBar onRouteChange={this.onRouteChange}/>
+        { (this.state.route === 'home')
+            ?
+              <div>
+                <Logo/>
+                <Rank/>
+                <Input onInputChange={this.onInputChange} onSubmit={this.onSubmit}/>
+                <Image imageDetect={this.state.imageurl} bbox={this.state.bbox}/>
+              </div>
+            : (this.state.route === 'signin')
+            ?
+              <SignIn onRouteChange={this.onRouteChange}/>
+            :
+              <SignUp onRouteChange={this.onRouteChange}/>
+              
+          }
+        }
       </div>
       )
   }

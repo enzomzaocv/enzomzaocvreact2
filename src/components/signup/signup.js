@@ -1,6 +1,6 @@
 import React from 'react';
 
-const SignUp= () =>{
+const SignUp= (onRouteChange) =>{
 	return(
 		<main className="pa4 black-80">
   <form className="measure center">
@@ -28,7 +28,11 @@ const SignUp= () =>{
       </div>
     </fieldset>
     <div className="">
-      <input className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib" type="submit" value="Sign up"/>
+      <input 
+      className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib" 
+      type="submit" 
+      value="Sign up"
+      onClick={()=>onRouteChange('signin')}/>
     </div>
   </form>
 </main>
