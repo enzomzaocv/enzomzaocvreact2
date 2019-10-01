@@ -1,6 +1,6 @@
 import React from 'react';
 
-const SignUp= (onRouteChange) =>{
+const SignUp= ({onRouteChange}) =>{
 	return(
 		<main className="pa4 black-80">
   <div className="measure center">
