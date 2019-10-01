@@ -19,7 +19,8 @@ class App extends Component{
       input:'',
       imageurl:'',
       bbox:{},
-      route: 'signin'
+      route: 'signin',
+      issignedin: false
     }
   }
 
@@ -66,6 +67,11 @@ class App extends Component{
   }
 
   onRouteChange=(route)=>{
+    if(route === 'signout'){
+      this.setState({issignedin: false})
+    }else if(route === 'home'){
+      this.setState({issignedin:true})
+    }
     this.setState({route:route});
   }
 
@@ -75,8 +81,8 @@ class App extends Component{
         <Particles  className='particles'
                   params={JSON.parse(JSON.stringify(particulasConfig))}
                   />
-        <NavBar onRouteChange={this.onRouteChange}/>
-        { (this.state.route === 'home')
+        <NavBar onRouteChange={this.onRouteChange} issignedin={this.state.issignedin}/>
+        { this.state.route === 'home'
             ?
               <div>
                 <Logo/>
@@ -84,12 +90,12 @@ class App extends Component{
                 <Input onInputChange={this.onInputChange} onSubmit={this.onSubmit}/>
                 <Image imageDetect={this.state.imageurl} bbox={this.state.bbox}/>
               </div>
-            : (this.state.route === 'signin')
+            : (this.state.route === 'signin'
             ?
               <SignIn onRouteChange={this.onRouteChange}/>
             :
               <SignUp onRouteChange={this.onRouteChange}/>
-              
+              )
           }
         }
       </div>
