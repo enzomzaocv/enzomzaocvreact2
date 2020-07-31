@@ -11,7 +11,13 @@ import Clarifai from 'clarifai';
 import SignIn from '../components/signin/signin'
 import SignUp from '../components/signup/signup'
 const app = new Clarifai.App({apiKey: '0ec2241b9ef442e9aefc036b79dc1d39'});
-
+const voidUser={
+          "id":0,
+          "nombre": "",
+          "email": "",
+          "joined": "",
+          "entries": 0
+      }
 class App extends Component{
   constructor(){
     super();
@@ -20,9 +26,11 @@ class App extends Component{
       imageurl:'',
       bbox:{},
       route: 'signin',
-      issignedin: false
+      issignedin: false,
+      currentUser:voidUser
     }
   }
+
 
   onInputChange=(event)=>{
     this.setState({input: event.target.value});
@@ -74,6 +82,14 @@ class App extends Component{
     }
     this.setState({route:route});
   }
+  loadUser=(user)=>{
+    this.logout();
+    this.setState({currentUser:{...user}});
+  }
+  logout=()=>{
+    this.setState({issignedin:false});
+    this.setState({currentUser:this.voidUser});
+  }
 
   render(){
     return(
@@ -81,18 +97,19 @@ class App extends Component{
         <Particles  className='particles'
                   params={JSON.parse(JSON.stringify(particulasConfig))}
                   />
-        <NavBar onRouteChange={this.onRouteChange} issignedin={this.state.issignedin}/>
+        <NavBar onRouteChange={this.onRouteChange} issignedin={this.state.issignedin} logout={this.logout}/>
         { this.state.route === 'home'
             ?
               <div>
                 <Logo/>
-                <Rank/>
+                <Rank user={this.state.currentUser}/>
                 <Input onInputChange={this.onInputChange} onSubmit={this.onSubmit}/>
                 <Image imageDetect={this.state.imageurl} bbox={this.state.bbox}/>
               </div>
-            : (this.state.route === 'signin'
+            : 
+              (this.state.route === 'signin'
             ?
-              <SignIn onRouteChange={this.onRouteChange}/>
+              <SignIn onRouteChange={this.onRouteChange} loadUser={this.loadUser}/>
             :
               <SignUp onRouteChange={this.onRouteChange}/>
               )

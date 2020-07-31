@@ -1,11 +1,15 @@
 import React from 'react';
 
-const NavBar = ({onRouteChange, issignedin}) => {
+const NavBar = ({onRouteChange, issignedin, logout}) => {
+	const logoutAndRedirect=()=>{
+		logout();
+		onRouteChange('signin');
+	}
 	if(issignedin === true){
 		return (
 			<nav className="flex bb b--white-10 bg-dark-gray justify-end ">
 			  	<div className="flex-grow pa1 flex items-center">
-			  	<p className="pointer f6 dib white bg-animate hover-bg-white hover-black no-underline pv2 ph4 br-pill ba b--white-20 mr1" onClick={()=>onRouteChange('signin')}>Sign out</p>
+			  	<p className="pointer f6 dib white bg-animate hover-bg-white hover-black no-underline pv2 ph4 br-pill ba b--white-20 mr1" onClick={logoutAndRedirect}>Sign out</p>
 			  	</div>
 			</nav>
 		)
