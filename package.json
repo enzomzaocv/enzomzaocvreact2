@@ -4,7 +4,6 @@
   "private": true,
   "homepage": "https://enzomzaocv.github.io/enzomzaocvreact2",
   "dependencies": {
-    "clarifai": "^2.9.1",
     "gh-pages": "^2.2.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",

@@ -7,17 +7,17 @@ import Image from '../components/main/image'
 import Rank from '../components/main/rank'
 import Particles from 'react-particles-js';
 import particulasConfig from './particlesjs-config.json';
-import Clarifai from 'clarifai';
 import SignIn from '../components/signin/signin'
 import SignUp from '../components/signup/signup'
-const app = new Clarifai.App({apiKey: '0ec2241b9ef442e9aefc036b79dc1d39'});
+
 const voidUser={
-          "id":0,
-          "nombre": "",
-          "email": "",
-          "joined": "",
-          "entries": 0
-      }
+  "id":0,
+  "nombre": "",
+  "email": "",
+  "joined": "",
+  "entries": 0
+}
+
 class App extends Component{
   constructor(){
     super();
@@ -31,27 +31,35 @@ class App extends Component{
     }
   }
 
-
   onInputChange=(event)=>{
-    this.setState({input: event.target.value});
-    console.log(this.state);
+    this.setState({bbox:{}})
+    this.setState({imageurl: event.target.value});
   }
 
-  onSubmit=()=>{
-    console.log('click submit');
-    this.setState({imageurl:this.state.input})
-    //Respuesta Clarifai
-    // En {id: Clarifai.GENERAL_MODEL... reemplazamos GENERAL_MODEL por el model que realmente vamos a utilizar
-    app.models.predict('a403429f2ddf4b49b307e318f00e528b', this.state.input)
-      .then(response => {
-        // There was a successful response
-        this.displayFaceBox(this.definirBox(response));
+  onSubmit=(imageurl)=>{
+    this.setState({imageurl:this.state.imageurl});
 
-      })
-      .catch(error => {
-        // There was an error
-        console.log(error)
-      });
+    fetch('http://localhost:3009/imageurl', {
+      method: 'POST', // or 'PUT'
+      headers:{'Content-Type': 'application/json'},
+      body: JSON.stringify({imageurl:this.state.imageurl})
+    })
+    .then(apiresponse => apiresponse.json())
+    .then(apiresponse=>{
+      if(apiresponse){
+        fetch('http://localhost:3009/image', {
+          method: 'PUT', // or 'PUT'
+          body: JSON.stringify({id:this.state.currentUser.id}), // data can be `string` or {object}!
+          headers:{'Content-Type': 'application/json'}
+        })
+        .then(countresponse => countresponse.json())
+        .then(countresponse =>{
+          this.setState(Object.assign(this.state.currentUser, { entries: countresponse}));
+        })
+      }
+      this.displayFaceBox(this.definirBox(apiresponse))
+    })
+    .catch(error => console.log(error))
   }
 
   definirBox=(data)=>{
@@ -68,12 +76,9 @@ class App extends Component{
       top_row:(height * coordenadas.top_row)
     }
   }
-
   displayFaceBox=(box)=>{
-    console.log(box);
     this.setState({bbox:box});
   }
-
   onRouteChange=(route)=>{
     if(route === 'signout'){
       this.setState({issignedin: false})
@@ -114,7 +119,7 @@ class App extends Component{
               <SignUp onRouteChange={this.onRouteChange}/>
               )
           }
-        }
+        
       </div>
       )
   }
