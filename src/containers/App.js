@@ -93,6 +93,7 @@ class App extends Component{
   }
   logout=()=>{
     this.setState({issignedin:false});
+    this.setState({imageurl:""});
     this.setState({currentUser:this.voidUser});
   }
 
