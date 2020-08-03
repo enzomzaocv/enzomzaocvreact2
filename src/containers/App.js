@@ -39,7 +39,7 @@ class App extends Component{
   onSubmit=(imageurl)=>{
     this.setState({imageurl:this.state.imageurl});
 
-    fetch('http://localhost:3009/imageurl', {
+    fetch('https://enzochaconreactapp.herokuapp.com/imageurl', {
       method: 'POST', // or 'PUT'
       headers:{'Content-Type': 'application/json'},
       body: JSON.stringify({imageurl:this.state.imageurl})
@@ -47,7 +47,7 @@ class App extends Component{
     .then(apiresponse => apiresponse.json())
     .then(apiresponse=>{
       if(apiresponse){
-        fetch('http://localhost:3009/image', {
+        fetch('https://enzochaconreactapp.herokuapp.com/image', {
           method: 'PUT', // or 'PUT'
           body: JSON.stringify({id:this.state.currentUser.id}), // data can be `string` or {object}!
           headers:{'Content-Type': 'application/json'}

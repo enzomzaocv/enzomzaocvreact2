@@ -81,7 +81,7 @@ const SignUp= ({onRouteChange}) =>{
   }
   const submitForm=()=>{
     setError("response")
-    var url = 'http://localhost:3009/signup';
+    var url = 'https://enzochaconreactapp.herokuapp.com/signup';
     var data = form;
     fetch(url, {
       method: 'POST', // or 'PUT'
